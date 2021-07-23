@@ -1,0 +1,33 @@
+import React from "react";
+import ReactDom from "react-dom";
+
+type UserData = {
+  uniqueId: number;
+  name: string;
+  private: boolean;
+};
+
+const UserListItem: React.FC<{ user: UserData }> = (props) => {
+  return !props.user.private && <li>{props.user.name.toUpperCase()}</li>;
+};
+
+const UserList = () => {
+  const data: UserData[] = [
+    { uniqueId: 1, name: "abigail", private: false },
+    { uniqueId: 2, name: "brian", private: false },
+    { uniqueId: 3, name: "caroline", private: false },
+    { uniqueId: 4, name: "david", private: true },
+    { uniqueId: 5, name: "eva", private: false },
+    { uniqueId: 6, name: "fernando", private: true },
+    { uniqueId: 7, name: "george", private: false },
+  ];
+  return (
+    <ul>
+      {data.map((user) => (
+        <UserListItem key={user.uniqueId} user={user} />
+      ))}
+    </ul>
+  );
+};
+
+ReactDom.render(<UserList />, document.getElementById("root"));
