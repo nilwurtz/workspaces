@@ -1,0 +1,4 @@
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+next_multi          latest              acd6f5ccae83        3 minutes ago       574MB
+next_single         latest              d211c6246173        6 minutes ago       899MB
+next_dev            latest              57e2abc43c19        20 minutes ago      1.44GB
