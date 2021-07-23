@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": true,
+  "files.encoding": "utf8",
+  "python.pythonPath": ".venv/bin/python",
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--ignore=E402, E501, W503"],
+  "python.formatting.provider": "autopep8",
+  "python.formatting.autopep8Args": [
+    "--ignore",
+    "E402 E501",
+    "--max-line-length",
+    "120"
+  ],
+  "autoDocstring.docstringFormat": "google"
+}
