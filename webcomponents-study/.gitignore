@@ -1,0 +1,9 @@
+.build
+build
+web_modules
+node_modules
+
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+
+target/
