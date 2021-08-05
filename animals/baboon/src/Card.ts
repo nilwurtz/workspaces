@@ -1,16 +1,23 @@
-import { html, LitElement } from "lit"
-import { customElement, property } from "lit/decorators"
+import { css, html, LitElement } from "lit"
+import { customElement } from "lit/decorators"
 
 @customElement('x-card')
 export class Card extends LitElement {
-  @property()
-  version = "z"
+  static styles = css`
+    p { color: blue }
+    div {background-color: red}`;
 
   render() {
     return html`
     <div>
-      <p>card title</p>
+      <p>card title something</p>
     </div>
     `
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'x-card': Card;
   }
 }

@@ -5,20 +5,26 @@ services:
     build:
       context: ./chinchilla
       dockerfile: Dockerfile
-
     ports:
       - 3000:3000
     volumes:
       - ./chinchilla:/app/
-      - ./chinchilla/node_modules:/app/node_modules
+      - /app/node_modules
+      - /app/.next
 
   baboon:
     build:
       context: ./baboon
       dockerfile: Dockerfile
-
-    ports:
-      - 3001:3001
     volumes:
       - ./baboon:/app/
-      - ./baboon/node_modules:/app/node_modules
+      - /app/node_modules
+
+  nginx:
+    build:
+      context: ./environments/images/nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./baboon/public:/var/www/html

@@ -1,4 +1,5 @@
 import { NextPage, GetServerSideProps } from "next"
+import Head from "next/head"
 import { getCardHtml } from "../lib/api"
 
 type Props = {
@@ -7,21 +8,23 @@ type Props = {
 
 const Index: NextPage<Props> = (props) => {
   return (
-    <div>
-      <h1>Cincilla Page</h1>
-      <div dangerouslySetInnerHTML={{ __html: props.card }}></div>
-    </div>
+    <>
+      <Head>
+        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: props.card }} />
+      </Head>
+
+      <div>
+        <h1>Cincilla Page</h1>
+
+      </div>
+    </>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  console.log("-----")
   const card = await getCardHtml()
-  console.log(card)
   return {
-    props: {
-      card: card
-    }
+    props: { card }
   }
 }
 

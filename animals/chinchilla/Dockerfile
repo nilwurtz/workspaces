@@ -1,10 +1,11 @@
 FROM node:16-buster-slim
 
 WORKDIR /app
-USER node
+
 COPY package* ./
 RUN npm i
 
+USER node
 COPY . ./
 
 EXPOSE 3000
