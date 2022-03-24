@@ -1,0 +1,10 @@
+app:
+  name: rei-api
+  port: 80
+
+service:
+  port: 8080
+
+image:
+  name: rei-api
+  imagePullPolicy: never

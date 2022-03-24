@@ -1,0 +1,31 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+build:
+  artifacts:
+    - image: rei-api
+      context: ../../rei-api
+      docker:
+        dockerfile: ../rei-api/Dockerfile
+        noCache: false
+        squash: false
+      sync:
+        infer:
+          - '**/*'
+  local:
+    useBuildkit: true
+  tagPolicy:
+    dateTime:
+      format: "20060102_150405"
+      timezone: "Local"
+deploy:
+  helm:
+    releases:
+      - name: rei-api
+        chartPath: ../rei-api/
+        valuesFiles:
+          - "../rei-api/values.dev.yaml"
+        setValues:
+          image:
+            imagePullPolicy: IfNotPresent
+        artifactOverrides:
+          image.name: rei-api

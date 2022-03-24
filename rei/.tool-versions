@@ -1,0 +1,4 @@
+minikube 1.25.2
+kubectl 1.23.5
+skaffold 1.37.0
+helm 3.8.1
