@@ -1,10 +1,11 @@
 app:
   name: rei-api
-  port: 80
+  port: 8000
 
 service:
   port: 8080
 
 image:
-  name: rei-api
-  imagePullPolicy: never
+  repository: rei-api
+  tag: latest
+  imagePullPolicy: IfNotPresent

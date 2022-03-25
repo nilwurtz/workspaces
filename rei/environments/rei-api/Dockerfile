@@ -1,11 +1,10 @@
-FROM rust:1.59.0-slim-buster
-
+FROM rust:1.59.0-slim-buster as builder
 WORKDIR /app
-
 COPY . .
+RUN cargo build --release
 
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/app/target \
-    cargo build --release
-
-CMD ["/app/target/release/rei-api"]
+FROM debian:buster-slim
+WORKDIR /app
+COPY --from=builder /app/target/release/rest rei-api
+EXPOSE 8000
+CMD [ "./rei-api" ]
