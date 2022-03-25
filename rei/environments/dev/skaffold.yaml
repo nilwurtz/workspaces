@@ -8,9 +8,6 @@ build:
         dockerfile: ../rei-api/Dockerfile
         noCache: false
         squash: false
-      # sync:
-      #   infer:
-      #     - '**/*'
   local:
     push: false
     useBuildkit: true
@@ -22,6 +19,8 @@ deploy:
   helm:
     releases:
       - name: rei-api
+        namespace: rei
+        createNamespace: true
         chartPath: ../rei-api/
         valuesFiles:
           - "../rei-api/values.dev.yaml"
@@ -32,3 +31,10 @@ deploy:
           image: docker.io/library/rei-api
         imageStrategy:
           helm: {}
+portForward:
+- resourceType: Service
+  resourceName: rei-api-service
+  namespace: rei
+  port: 8000
+  address: 0.0.0.0
+  localPort: 8000
