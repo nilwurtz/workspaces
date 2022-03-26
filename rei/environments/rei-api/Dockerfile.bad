@@ -11,9 +11,10 @@ COPY --from=planner /app/recipe.json recipe.json
 COPY . .
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/app/target \
-    cargo build --release && mv target/release/rest /tmp/rest
+    cargo build --release
+
 
 FROM debian:buster-slim
 WORKDIR /app
-COPY --from=builder /tmp/rest rei-api
+COPY --from=builder /app/target/release/rest rei-api
 CMD [ "./rei-api" ]
