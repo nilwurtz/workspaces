@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+
+
+main {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+#form {
+  width: 47%;
+  background-color: lightblue;
+  border: 1px solid gray;
+  padding: 2rem;
+}
+
+div.form-example + * {
+  margin-top: .5rem;
+}
+
+#form button {
+  margin-top: 1rem;
+  width: 100%;
+}
+
