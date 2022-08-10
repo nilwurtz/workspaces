@@ -1,0 +1,65 @@
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+:root {
+  background: white;
+  color: darkslategray;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+main {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.profile-list {
+  display: flex;
+}
+
+.profile-list > * {
+  /* 直下の要素の間のレイアウト */
+  margin-right: 1rem;
+}
+
+.profile-card {
+  /* 要素内のレイアウトのみ */
+  border: 1px solid darkslategray;
+  border-radius: 2px;
+  padding: 3rem;
+}
+
+.image {
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+}
+
+.name {
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
