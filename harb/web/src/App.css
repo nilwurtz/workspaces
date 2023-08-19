@@ -1,0 +1,17 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-size: 16px;
+}
+
+.card {
+  padding: 2em;
+}
+
+.input {
+  font-size: 16px;
+  padding: 0.5em 1em;
+}
+
