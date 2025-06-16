@@ -4,6 +4,11 @@ theme: default
 paginate: true
 size: 16:9
 style: |
+  @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@200;400;700&family=Noto+Serif+JP:wght@200;400;700&display=swap");
+  * {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
   section {
     font-size: 26px;
     line-height: 1.4;
@@ -164,7 +169,11 @@ assistant: "逆順にソートするには..."
 **この制約により「読み返し」「見直し」が根本的に不可能**
 
 ---
-TODO: LLMの図を入れる
+
+TODO: LLMの図を入れる。
+
+
+
 ---
 
 ## 制約の具体的な影響
