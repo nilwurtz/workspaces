@@ -231,11 +231,9 @@ TODO: LLMの図を入れる。
 
 ---
 
-## 制約2: トークンベースの処理
+## 制約2: トークンベースの処理 に起因する認識の限界
 
-### サブワード単位での認識の限界
-
-#### トークン化による文字レベル情報の損失
+### トークン化による文字レベル情報の損失
 
 ```python
 # トークン化の例（GPT系モデル）
@@ -267,7 +265,7 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 
 ---
 
-## トークン化の実用的な問題
+### トークン化の実用的な問題
 
 <div class="problem">
 ❌ **厳密な文字列処理**<br>
@@ -285,15 +283,11 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 ・API仕様の理解・説明
 </div>
 
-<div class="engineer-focus">
-💻 **設計指針**: 文字レベルの精密さが必要な処理は別ツールと組み合わせる
-</div>
-
 ---
 
 ## 制約3: 後戻りできない・修正不可
 
-### 1. 一度生成された情報の修正・取消しの困難さ
+### 一度生成された情報の修正・取消しの困難さ
 
 <div class="problem">
 ❌ **典型的な問題**: 間違った前提で回答開始<br>
@@ -302,41 +296,34 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 → 一貫して間違った結論に到達
 </div>
 
-<div class="engineer-focus">
-💻 **アプリケーション設計への示唆**<br>
-・誤りを検出する外部検証機構が必要<br>
-・生成途中での軌道修正メカニズムの実装<br>
-・不確実性の高い回答の識別機能
-</div>
+基本的には「だめだこの感じ」となった時点で割り込んであげるのが吉。
 
 ---
 
 ## 制約4: パターンに固執、繰り返し発生
 
-### 2. 統計的パターンからの脱却困難
+### 1. 統計的パターンからの脱却困難
+
+パターンを見出すのが得意なLLMは、学習データに基づいて「よくあるパターン」を繰り返す傾向がある。
+最新のモデルだとあまり起きない。
 
 <div class="problem">
-❌ **無限ループ的出力**<br>
+❌ <strong>無限ループ的出力</strong><br>
 ・リスト生成時の同じ項目の反復<br>
 ・コード生成時の同じパターンの繰り返し<br>
 ・「遺産」「未来」「情熱的」といった特定語彙の連続出力
 </div>
 
-<div class="solution">
-✅ **対策技術**<br>
-・`temperature` パラメータによるランダム性導入<br>
-・繰り返し検出による自動停止<br>
-・最大長制限による強制終了
-</div>
+
 
 ---
 
 ## 制約5: 情報順序への依存性
 
-### 3. 「Lost in the Middle」現象
+### 「Lost in the Middle」現象
 
 <div class="problem">
-❌ **プロンプト順序の影響**<br>
+❌ <strong>プロンプト順序の影響</strong><br>
 ・冒頭と末尾の情報は記憶されやすい<br>
 ・中間部分の情報は活用されにくい<br>
 ・指示の位置により出力品質が大きく変動
@@ -348,24 +335,24 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 
 ## 制約6: 思考時間の欠如
 
-### 4. 内省的思考プロセスの不在
+### 内省的思考プロセスの不在
 
 <div class="problem">
-❌ **即時応答の制約**<br>
+❌ <strong>即時応答の制約</strong><br>
 ・「考える時間」が存在しない<br>
-・内的独り言による検討ができない<br>
+・内的な "独り言" による検討ができない<br>
 ・複雑な推論の段階的構築が困難
 </div>
 
 <div class="solution">
-✅ **Chain of Thought (CoT) による対策**<br>
+✅ <strong>Chain of Thought (CoT) による対策</strong><br>
 ・思考プロセスの外部化を強制<br>
 ・「ステップバイステップで考えて」指示<br>
 ・中間推論の明示的出力により品質向上
 </div>
 
 <div class="engineer-focus">
-💻 **重要**: LLMに「考えさせる」には思考を出力として表現させる必要がある
+💻 LLMに「考えさせる」には思考を出力として表現させる必要がある
 </div>
 
 ---
@@ -381,7 +368,7 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 </div>
 
 <div class="engineer-focus">
-💻 RAGシステムでの注意：検索結果に無関係な情報が混入すると、それを無理に使おうとする
+💻 TODO：実際の例
 </div>
 
 ---
