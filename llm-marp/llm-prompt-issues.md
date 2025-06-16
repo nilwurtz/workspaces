@@ -227,6 +227,11 @@ TODO: LLMの図を入れる。
 
 ---
 
+![](/images/0001.png)
+
+ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
+---
+
 ## トークン化の実用的な問題
 
 <div class="problem">
