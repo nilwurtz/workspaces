@@ -58,6 +58,13 @@ style: |
     border-left: 4px solid #3b82f6;
     margin: 15px 0;
   }
+  .ref {
+    font-size: .6em;
+    color: #666;
+    display: block;
+    text-align: center;
+    margin-top: .3em;
+  }
 ---
 
 # なぜLLMアプリケーションへの指示は失敗するのか？
@@ -91,38 +98,55 @@ style: |
 
 ### 大規模言語モデル（Large Language Model）
 
-- **本質**: 次の単語を予測するタスクを繰り返す テキスト補完エンジン
+- **本質**: 次の単語を予測するタスクを繰り返す **テキスト補完エンジン**
 - **学習**: 大量のテキストデータから言語のパターンや構造を学習
 
----
+![w:600 h:300 cover](/images/04-gpt3-generate-tokens-output.gif)
 
-## 学習データによって異なる補完結果
-
-**プロンプト**: "昨日、テレビが壊れました。今は電源を入れることができません。"
-
-<div class="solution">
-📚 **対話・小説データで学習**<br>
-"それなら、あなたの家で試合を見ましょうか？"<br><br>
-📞 **カスタマーサービスデータで学習**<br>
-"まず、テレビを壁のコンセントから抜いて再度差し込んでみてください。"
-</div>
-
-<div class="engineer-focus">
-💻 **同じプロンプトでも学習データ次第で全く異なる出力**<br>
-OpenAI、Anthropic、Google等のモデルが異なる振る舞いをする理由
-</div>
-
+<span class="ref">ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
+</span>
 
 ---
-TODO:補完エンジンではなぜChatできてるの？と先のスライドでなったところに、このスライドで回答する。
-## 会話はどう成り立つ？
 
-### ChatML形式による役割定義
+**次の単語に何を選ぶと一番それっぽいでしょう？クイズ**をひたすらに答え続けている
+```
+["Shohei", "Ohtani", "is", "a"] -> "baseball"? "pitcher"? "great"?
 
-LLMは大量の対話データから「適切な応答パターン」を学習している
+↓ "baseball"
+
+["Shohei", "Ohtani", "is", "a", "baseball"] -> "player"? "pitcher"? "star"?
+
+↓ "player"
+
+["Shohei", "Ohtani", "is", "a", "baseball", "player"] -> "who"? "that"? "from"?
+```
+
+
+---
+
+### 実際には「次のトークン」を予測している
+- **例**
+"strange new worlds" -> [str][ange][ new][ worlds]
+特に単語というわけではない。
+
+- **大文字・小文字で全く扱いが変わる**
+"STRANGE NEW WORLDS" -> [STR][ANGE][ NEW][ WOR][L][DS]
+
+
+---
+
+## Q: LLMはなぜ「Chat」できるのか？
+
+---
+
+
+
+### LLMはなぜ「Chat」できるのか？
+
+A.対話データを学習しているから
 
 ```yaml
-# 学習データに含まれる対話形式の例
+# 学習データに含まれる対話形式の例 (これはちょっと古いらしい)
 system: "あなたは親切なプログラミングアシスタントです"
 user: "Pythonでリストをソートする方法は？"
 assistant: "Pythonでリストをソートする方法をいくつか紹介します..."
@@ -131,13 +155,21 @@ assistant: "逆順にソートするには..."
 ```
 
 <div class="engineer-focus">
-💻 **重要な洞察**: LLMは「アシスタントらしい応答」を学習しているだけ<br>
+💻 LLMは「アシスタントらしい応答」を学習しているだけ<br>
 実際に理解しているわけではなく、パターンを模倣している
 </div>
 
-<div class="engineer-focus">
-💻 この形式により、AIエージェントやタスク実行型LLMアプリケーションが実現される
-</div>
+
+---
+
+### LLMの応用性の高さ
+
+LLMの基礎は「テキスト補完エンジン」だが、
+学習データの中身によって対話・質問応答・コード生成など多様なタスクに対応可能
+
+
+→ この柔軟性と自由度により、Tool呼び出し・タスク実行型AI Agentが実現
+
 
 ---
 
@@ -227,9 +259,12 @@ TODO: LLMの図を入れる。
 
 ---
 
-![](/images/0001.png)
+
+![](/images/08-gpt3-tokens-transformer-blocks.gif)
 
 ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
+
+
 ---
 
 ## トークン化の実用的な問題
