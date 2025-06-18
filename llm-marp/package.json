@@ -1,0 +1,11 @@
+{
+  "name": "llm-marp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "pdf": "npx @marp-team/marp-cli@latest llm-prompt-issues.md -o output.pdf --pdf-outlines"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

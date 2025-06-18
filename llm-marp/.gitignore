@@ -1,0 +1,5 @@
+*.html
+*.pdf
+*.pptx
+md/
+node_modules/
