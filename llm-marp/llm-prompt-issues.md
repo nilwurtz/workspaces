@@ -13,7 +13,7 @@ style: |
   section {
     font-size: 26px;
     line-height: 1.4;
-    background-color: #f6f6f6;
+    background-color: #f6f6ea;
   }
   h1 {
     color: #7F55B1;
@@ -90,7 +90,7 @@ style: |
 
 ## tl;dr
 
-**読もう**
+**全員読もう**
 
 <div class="center-image">
 
@@ -103,11 +103,10 @@ style: |
 
 ## 今日のアジェンダ
 
-1. **LLMの基本** - テキスト補完エンジンの実態
+1. **LLMの基本** - 知能はないテキスト補完エンジン
 2. **LLMの制約** - なぜ期待通りに動かないのか
-3. **失敗パターン** - エンジニアがハマりがちな罠
-4. **プロンプトエンジニアリング** - 実践的な改善手法
-5. **LLMアプリケーション** - AIエージェントの仕組み
+3. **LLMアプリケーション** - AIエージェントの仕組み
+4. **失敗パターンと対策** - プロンプトエンジニアリング+α
 
 ---
 
@@ -174,6 +173,7 @@ A.対話データを学習しているから
 
 ```yaml
 # 学習データに含まれる対話形式の例 (これはちょっと古いらしい)
+
 system: "あなたは親切なプログラミングアシスタントです"
 user: "Pythonでリストをソートする方法は？"
 assistant: "Pythonでリストをソートする方法をいくつか紹介します..."
@@ -194,9 +194,20 @@ assistant: "逆順にソートするには..."
 LLMの基礎は「テキスト補完エンジン」だが、
 学習データの中身によって対話・質問応答・コード生成など多様なタスクに対応可能
 
+<div class="engineer-focus">
+✅ 自然言語の持つ柔軟性と自由度によって Tool呼び出し・タスク実行型AI Agentが実現
+</div>
 
-→ この柔軟性と自由度により、Tool呼び出し・タスク実行型AI Agentが実現
+### 例
 
+```
+# タスク実行のための学習データのイメージ
+
+system: "あなたは優秀なプログラミングアシスタントです"
+user: "差分をCommitしてPushして"
+assistant: "<call git commit> <call git push>"
+```
+→ LLMの応答で、<code><call git commit></code> の部分が来たらそれをtool呼び出しとして実行する
 
 ---
 
@@ -278,13 +289,13 @@ ref: LLMのプロンプトエンジニアリング
 
 <div class="problem">
 ❌ <strong>誤字検出の困難さ</strong><br>
-"gohst"を見たとき、一方向処理により"ghost"との関連性を認識しにくい<br>
-文脈から推測するしかない
+・"gohst"を見たとき、一方向処理により"ghost"との関連性を認識しにくい<br>
+・どんなトークンも文脈から推測するしかない
 </div>
 
 <div class="engineer-focus">
 💻 <strong>実用的影響</strong><br>
-変数名の typo、API名の微細な違い、ファイルパスの大小文字違いなどを正確に扱えない
+・変数名の typo、API名の微細な違い、ファイルパスの大小文字違いなどを正確に扱えない
 </div>
 
 ---
@@ -416,16 +427,177 @@ ref:LLMのプロンプトエンジニアリング
 
 ---
 
-### 人間の思考とLLMの処理の違い
+### 改めて：人間の思考とLLMの処理の違い
+
+人間の言葉は現実を反映するが、モデルの言葉は人間（から生まれた学習データ）を反映する
+モデルに渡す言葉とその応答に対するメンタルモデルは、人間のものと異なることを認識する
+
 
 ![](images/pefl_0203.png)
 
 <div class="ref">
-ref: LLMのプロンプトエンジニアリング<br >
-図2-3 人間の言葉は現実を反映するが、モデルの言葉は人間を反映する
+ref: LLMのプロンプトエンジニアリング
 </div>
 
 ---
+
+# 3. LLMアプリケーション
+
+## AIエージェントの仕組み
+
+---
+
+
+「xxx」って言ったらやってくれた！すごい！魔法！
+
+---
+
+
+## 「魔法」の正体
+
+TODO:LLMは結局文字列しか受け取らず文字列しか生成しないということを強調する。そのため、Context収集やプロンプト生成を行うアプリケーション層の性能と、その特性を知ることもかなり重要。という旨を強調する。
+
+<div class="highlight">
+実際は「コンテキスト収集 + プロンプト生成 + LLM呼び出し」の組み合わせ
+</div>
+
+### 代表例
+- GitHub Copilot Agent
+- Cursor / Windsurf
+- Claude / ChatGPT のCode Interpreter
+- カスタムGPTs
+
+<div class="engineer-focus">
+💻 **重要な認識**: これらは「知能」を持つわけではなく、<br>
+「タスク実行をする文字列」を大量学習したLLMが動いているだけ
+</div>
+
+## LLMアプリケーションの実態
+
+### GitHub Copilot AgentやJunieも結局は...
+
+<div class="highlight">
+🔧 コンテキストを収集 → 文字列を生成 → LLMに送信<br>
+📝 "タスク実行をしているという文字列" を大量学習したLLMが動いているだけ
+</div>
+
+```mermaid
+VSCode → Copilot Agent → Context収集 → LLM → 応答 → ユーザー
+```
+
+---
+
+## Copilot Agentの内部処理（推測）
+
+```python
+def copilot_agent(user_request, workspace):
+    context = {
+        "current_file": get_active_file(),
+        "related_files": find_related_files(),
+        "git_history": get_recent_commits(),
+        "project_structure": analyze_workspace(),
+        "dependencies": parse_package_files(),
+        "user_intent": classify_request(user_request)
+    }
+
+    prompt = build_structured_prompt(context, user_request)
+    response = llm.generate(prompt)
+    return response
+```
+
+---
+
+## LLMアプリケーション利用の成功要因（1/2）
+
+### 1. アプリケーションの「コンテキスト収集品質」を理解する
+
+<div class="engineer-focus">
+💻 **Copilot の例**<br>
+・現在のファイル内容の取得精度<br>
+・関連ファイルの発見アルゴリズム<br>
+・プロジェクト構造の解析能力<br>
+・Git履歴からの文脈推測
+</div>
+
+**利用者としてできること**:
+- 関連ファイルを適切に配置・命名
+- プロジェクト構造を標準的な形に整理
+- コメントによる文脈情報の提供
+
+---
+
+## LLMアプリケーション利用の成功要因（2/2）
+
+### 2. アプリケーションの「プロンプト構築方式」に合わせる
+
+**構造化された情報提示を意識**:
+- 明確なタスク記述
+- 具体的な制約条件
+- 期待する出力形式の指定
+
+### 3. LLMの制約を理解した期待値設定
+
+<div class="engineer-focus">
+💻 **重要な認識**<br>
+・アプリケーションの「理解」も統計的推測にすぎない<br>
+・100%の精度は期待できない<br>
+・最終的な検証・テストは人間が実施<br>
+・段階的なタスク実行が効果的
+</div>
+
+---
+
+## LLMアプリケーション利用時の典型的問題（1/2）
+
+### 1. コンテキスト汚染の回避
+
+<div class="problem">
+❌ **無関係ファイルの影響**<br>
+Copilot が古い実装ファイルや無関係なテストファイルを参照<br>
+→ チェーホフの銃の誤謬により誤った提案
+</div>
+
+<div class="solution">
+✅ **対策**<br>
+・`.gitignore` での不要ファイル除外<br>
+・古いコードファイルの適切な整理<br>
+・明確なディレクトリ構造の維持
+</div>
+
+---
+
+## LLMアプリケーション利用時の典型的問題（2/2）
+
+### 2. 指示の具体性不足
+
+<div class="problem">
+❌ **曖昧な指示による誤解**<br>
+"このバグを修正して" → アプリが想定と異なる修正を実行
+</div>
+
+<div class="solution">
+✅ **改善例**<br>
+"TypeError: 'str' object is not callable エラーを修正。line 23のparse_date()呼び出しが問題。str型変数がメソッドと同名になっている"
+</div>
+
+### 3. 過度な期待と依存
+
+<div class="problem">
+❌ **「AIが全て解決してくれる」という幻想**<br>
+LLMアプリケーションに複雑なタスクを丸投げ
+</div>
+
+<div class="solution">
+✅ **適切な活用**<br>
+・小さなタスクに分解して段階的に実行<br>
+・生成結果の検証を怠らない<br>
+・人間の判断と組み合わせる
+</div>
+
+---
+
+
+
 
 
 # 3. 失敗パターン
@@ -591,153 +763,7 @@ LLMには「考える時間」がないため、思考プロセスを出力と�
 
 ---
 
-# 5. LLMアプリケーション
 
-## AIエージェントの仕組み
-
----
-
-
-## 「魔法」の正体
-
-TODO:LLMは結局文字列しか受け取らず文字列しか生成しないということを強調する。そのため、Context収集やプロンプト生成を行うアプリケーション層の性能と、その特性を知ることもかなり重要。という旨を強調する。
-
-<div class="highlight">
-実際は「コンテキスト収集 + プロンプト生成 + LLM呼び出し」の組み合わせ
-</div>
-
-### 代表例
-- GitHub Copilot Agent
-- Cursor / Windsurf
-- Claude / ChatGPT のCode Interpreter
-- カスタムGPTs
-
-<div class="engineer-focus">
-💻 **重要な認識**: これらは「知能」を持つわけではなく、<br>
-「タスク実行をする文字列」を大量学習したLLMが動いているだけ
-</div>
-
-## LLMアプリケーションの実態
-
-### GitHub Copilot AgentやJunieも結局は...
-
-<div class="highlight">
-🔧 コンテキストを収集 → 文字列を生成 → LLMに送信<br>
-📝 "タスク実行をしているという文字列" を大量学習したLLMが動いているだけ
-</div>
-
-```mermaid
-VSCode → Copilot Agent → Context収集 → LLM → 応答 → ユーザー
-```
-
----
-
-## Copilot Agentの内部処理（推測）
-
-```python
-def copilot_agent(user_request, workspace):
-    context = {
-        "current_file": get_active_file(),
-        "related_files": find_related_files(),
-        "git_history": get_recent_commits(),
-        "project_structure": analyze_workspace(),
-        "dependencies": parse_package_files(),
-        "user_intent": classify_request(user_request)
-    }
-
-    prompt = build_structured_prompt(context, user_request)
-    response = llm.generate(prompt)
-    return response
-```
-
----
-
-## LLMアプリケーション利用の成功要因（1/2）
-
-### 1. アプリケーションの「コンテキスト収集品質」を理解する
-
-<div class="engineer-focus">
-💻 **Copilot の例**<br>
-・現在のファイル内容の取得精度<br>
-・関連ファイルの発見アルゴリズム<br>
-・プロジェクト構造の解析能力<br>
-・Git履歴からの文脈推測
-</div>
-
-**利用者としてできること**:
-- 関連ファイルを適切に配置・命名
-- プロジェクト構造を標準的な形に整理
-- コメントによる文脈情報の提供
-
----
-
-## LLMアプリケーション利用の成功要因（2/2）
-
-### 2. アプリケーションの「プロンプト構築方式」に合わせる
-
-**構造化された情報提示を意識**:
-- 明確なタスク記述
-- 具体的な制約条件
-- 期待する出力形式の指定
-
-### 3. LLMの制約を理解した期待値設定
-
-<div class="engineer-focus">
-💻 **重要な認識**<br>
-・アプリケーションの「理解」も統計的推測にすぎない<br>
-・100%の精度は期待できない<br>
-・最終的な検証・テストは人間が実施<br>
-・段階的なタスク実行が効果的
-</div>
-
----
-
-## LLMアプリケーション利用時の典型的問題（1/2）
-
-### 1. コンテキスト汚染の回避
-
-<div class="problem">
-❌ **無関係ファイルの影響**<br>
-Copilot が古い実装ファイルや無関係なテストファイルを参照<br>
-→ チェーホフの銃の誤謬により誤った提案
-</div>
-
-<div class="solution">
-✅ **対策**<br>
-・`.gitignore` での不要ファイル除外<br>
-・古いコードファイルの適切な整理<br>
-・明確なディレクトリ構造の維持
-</div>
-
----
-
-## LLMアプリケーション利用時の典型的問題（2/2）
-
-### 2. 指示の具体性不足
-
-<div class="problem">
-❌ **曖昧な指示による誤解**<br>
-"このバグを修正して" → アプリが想定と異なる修正を実行
-</div>
-
-<div class="solution">
-✅ **改善例**<br>
-"TypeError: 'str' object is not callable エラーを修正。line 23のparse_date()呼び出しが問題。str型変数がメソッドと同名になっている"
-</div>
-
-### 3. 過度な期待と依存
-
-<div class="problem">
-❌ **「AIが全て解決してくれる」という幻想**<br>
-LLMアプリケーションに複雑なタスクを丸投げ
-</div>
-
-<div class="solution">
-✅ **適切な活用**<br>
-・小さなタスクに分解して段階的に実行<br>
-・生成結果の検証を怠らない<br>
-・人間の判断と組み合わせる
-</div>
 
 ---
 
