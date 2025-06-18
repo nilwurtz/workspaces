@@ -217,7 +217,8 @@ LLMの基礎は「テキスト補完エンジン」だが、
 - **層間制約**: 上位層の情報を下位層に戻せない
 
 <div class="engineer-focus">
-・各レイヤーは前段の出力のみを入力として受け取る
+・f(1) |> f(2) |> f(3) |> ... |> f(n)<br>
+・各レイヤーは前段の出力のみを入力として受け取るだけ
 </div>
 
 **この制約により「読み返し」「見直し」が根本的に不可能**
@@ -288,19 +289,6 @@ ref: LLMのプロンプトエンジニアリング
 
 ---
 
-<div class="center-image">
-
-![w:800](/images/08-gpt3-tokens-transformer-blocks.gif)
-
-</div>
-
-<div class="ref">
-
-ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
-</div>
-
----
-
 ### トークン化の実用的な問題(具体例)
 
 <div class="problem">
@@ -332,7 +320,7 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 ・指示の位置により出力品質が大きく変動
 </div>
 
-コンテキストが大きい場合その問題は顕著。
+*コンテキストが大きい場合その問題は顕著。*
 <div class="solution">
 ✅ <strong>対策</strong><br>
 ・重要な情報は冒頭・末尾に配置<br>
@@ -353,6 +341,7 @@ ref: LLMのプロンプトエンジニアリング
 </div>
 
 ---
+
 
 ## 制約4: 思考時間の欠如
 
