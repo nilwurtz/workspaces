@@ -9,6 +9,14 @@ style: |
     font-family: "Noto Sans JP", sans-serif;
     color: #333333;
   }
+  .center {
+    text-align: center;
+  }
+  .center-block {
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+  }
 
   section {
     font-size: 26px;
@@ -453,30 +461,53 @@ ref: LLMのプロンプトエンジニアリング
 
 ---
 
+<div class="center-block">
 
-「xxx」って言ったらやってくれた！すごい！魔法！
+**「xxを実装してください」って言ったらやってくれた！すごい！魔法！**
+**もうエンジニアいらない！**
+</div>
 
 ---
 
+<div class="center-block">
+
+Claude Code
+Github Copilot Agent
+Junie
+Devin
+etc...
+
+なんかすごい
+
+</div>
+
+---
+<!-- TODO:LLMは結局文字列しか受け取らず文字列しか生成しないということを強調する。そのため、Context収集やプロンプト生成を行うアプリケーション層の性能と、その特性を知ることもかなり重要。という旨を強調する。 -->
 
 ## 「魔法」の正体
 
-TODO:LLMは結局文字列しか受け取らず文字列しか生成しないということを強調する。そのため、Context収集やプロンプト生成を行うアプリケーション層の性能と、その特性を知ることもかなり重要。という旨を強調する。
-
 <div class="highlight">
-実際は「コンテキスト収集 + プロンプト生成 + LLM呼び出し」の組み合わせ
+
+**実際は「コンテキスト収集 + プロンプト生成 + LLM呼び出し」の組み合わせと制御**
+
 </div>
 
-### 代表例
-- GitHub Copilot Agent
-- Cursor / Windsurf
-- Claude / ChatGPT のCode Interpreter
-- カスタムGPTs
+
+これらは「知能」を持つわけではない。
+エンジニアのスキルっぽい文章を大量学習したLLM + エンジニアが実装した制御フロー で実現されている
+
 
 <div class="engineer-focus">
-💻 **重要な認識**: これらは「知能」を持つわけではなく、<br>
-「タスク実行をする文字列」を大量学習したLLMが動いているだけ
+- プログラムコード<br>
+- タスク実行をする文字列<br>
+- 問題解決する文字列<br>
+- 仕様書を生成する文字列<br>
+- ドキュメントを生成する文字列...
 </div>
+
+
+
+---
 
 ## LLMアプリケーションの実態
 
