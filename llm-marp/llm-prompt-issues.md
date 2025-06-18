@@ -42,7 +42,7 @@ style: |
     font-size: 22px;
   }
   .solution {
-    background-color: #E8E1F5;
+    background-color: #F0EBFF;
     padding: 12px;
     border-left: 4px solid #9B7EBD;
     margin: 12px 0;
@@ -55,9 +55,9 @@ style: |
     font-size: 20px;
   }
   .engineer-focus {
-    background-color: #EFEAF7;
+    background-color: #E8F5F3;
     padding: 12px;
-    border-left: 4px solid #7F55B1;
+    border-left: 4px solid #4A9B8A;
     margin: 12px 0;
     font-size: 22px;
   }
@@ -224,7 +224,7 @@ LLMの基礎は「テキスト補完エンジン」だが、
 
 ---
 
-## どういうことか？
+### どういうことか？
 
 
 ![](images/pefl_0215.png)
@@ -235,7 +235,7 @@ ref: LLMのプロンプトエンジニアリング
 
 ---
 
-## 制約の具体的な影響
+### 制約の具体的な影響
 
 <div class="problem">
 ❌ <strong>文字数カウント</strong>: "strawberryに含まれるRの数は？"<br>
@@ -245,6 +245,13 @@ ref: LLMのプロンプトエンジニアリング
 <div class="problem">
 ❌ <strong>文字列逆転</strong>: "hello を逆順にして"<br>
 → トークン化＋一方向性により困難
+</div>
+
+
+<div class="problem">
+❌ <strong>立ち止まれない</strong>: "このAPIの仕様は..." → 誤った情報を出力開始<br>
+→ 途中で間違いに気づいても修正せず継続<br>
+→ 一貫して間違った結論に到達
 </div>
 
 <div class="solution">
@@ -275,7 +282,8 @@ ref: LLMのプロンプトエンジニアリング
 </div>
 
 <div class="engineer-focus">
-💻 <strong>実用的影響</strong>: 変数名の typo、API名の微細な違い、ファイルパスの大小文字違いなどを正確に扱えない
+💻 <strong>実用的影響</strong><br>
+変数名の typo、API名の微細な違い、ファイルパスの大小文字違いなどを正確に扱えない
 </div>
 
 ---
@@ -293,7 +301,7 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 
 ---
 
-### トークン化の実用的な問題
+### トークン化の実用的な問題(具体例)
 
 <div class="problem">
 ❌ <strong>厳密な文字列処理</strong><br>
@@ -313,40 +321,7 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 
 ---
 
-## 制約3: 後戻りできない・修正不可
-
-### 一度生成された情報の修正・取消しの困難さ
-
-<div class="problem">
-❌ **典型的な問題**: 間違った前提で回答開始<br>
-"このAPIの仕様は..." → 誤った情報を出力開始<br>
-→ 途中で間違いに気づいても修正せず継続<br>
-→ 一貫して間違った結論に到達
-</div>
-
-基本的には「だめだこの感じ」となった時点で割り込んであげるのが吉。
-
----
-
-## 制約4: パターンに固執、繰り返し発生
-
-### 1. 統計的パターンからの脱却困難
-
-パターンを見出すのが得意なLLMは、学習データに基づいて「よくあるパターン」を繰り返す傾向がある。
-最新のモデルだとあまり起きない。
-
-<div class="problem">
-❌ <strong>無限ループ的出力</strong><br>
-・リスト生成時の同じ項目の反復<br>
-・コード生成時の同じパターンの繰り返し<br>
-・「遺産」「未来」「情熱的」といった特定語彙の連続出力
-</div>
-
-
-
----
-
-## 制約5: 情報順序への依存性
+## 制約3: 情報順序への依存性
 
 ### 「Lost in the Middle」現象
 
@@ -357,18 +332,35 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 ・指示の位置により出力品質が大きく変動
 </div>
 
-**具体例**: 段落の文字数カウント依頼を段落の後に置くと、LLMは段落処理時にカウント意図を知らないため失敗
+コンテキストが大きい場合その問題は顕著。
+<div class="solution">
+✅ <strong>対策</strong><br>
+・重要な情報は冒頭・末尾に配置<br>
+・「本題の質問」をリマインドする。「リフォーカス」
+</div>
 
 ---
 
-## 制約6: 思考時間の欠如
 
-### 内省的思考プロセスの不在
+
+<div class="center-image">
+
+![w:800](images/pefl_0601.png)
+</div>
+
+<div class="ref">
+ref: LLMのプロンプトエンジニアリング
+</div>
+
+---
+
+## 制約4: 思考時間の欠如
+
+### LLMは「独り言」ができない
 
 <div class="problem">
 ❌ <strong>即時応答の制約</strong><br>
 ・「考える時間」が存在しない<br>
-・内的な "独り言" による検討ができない<br>
 ・複雑な推論の段階的構築が困難
 </div>
 
@@ -380,26 +372,61 @@ ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 </div>
 
 <div class="engineer-focus">
-💻 LLMに「考えさせる」には思考を出力として表現させる必要がある
+💻 LLMに「考えさせる」には思考を出力として表現させる（書かせる）必要がある
 </div>
 
 ---
 
 ## 制約5: ハルシネーションと真実バイアス
 
-### プロンプトの情報を「正しい」と過信
+### ハルシネーション
 
 <div class="problem">
-❌ チェーホフの銃の誤謬<br>
-→ 無関係な情報でも「重要だから含まれているはず」と解釈<br>
-→ 実在しない情報でも「存在する」と仮定して回答
+❌ <strong>「トレーニングデータを模倣するマシン」の残念な副作用</strong><br>
+・もっともらしい情報をモデルが「自信を持って」生成してしまう<br>
+→「勝手に作り話をしないで」といったプロンプト指示はほとんど効果がない
+</div>
+
+<div class="solution">
+✅ <strong>対策</strong><br>
+・モデルに検証可能な背景情報を提供させる<br>
+→ ユーザーが検証する
+
+---
+
+## 制約5: ハルシネーションと真実バイアス
+
+### 真実バイアス
+
+<div class="problem">
+❌ <strong>プロンプトの情報を「正しい」と過信</strong><br>
+・間違ったプロンプトによってハルシネーションが誘発される<br>
+・それを途中で訂正するケースはごくまれ
 </div>
 
 <div class="engineer-focus">
-💻 TODO：実際の例
+💻 <strong>実用的影響</strong><br>
+・良かれと思って与えた情報が、モデルの誤った推論を誘発する可能性がある<br>
+・間違ったファイルを開きながらPrompt指示を行って、意図しないコンテキストを提供してしまう
+</div>
+
+
+---
+
+### チェーホフの銃の誤謬(ごびゅう)
+
+**与えられたのなら、意味があるはずだ**
+
+> 意味のある文章のスニペット（断片）を取得できれば、それは素晴らしいコンテキストとなりますが、無関係な情報を取得してしまうと、他のより有用なコンテキストが埋もれてしまう可能性があります。
+~中略~
+最悪の場合、モデルは**与えられた情報を必ず活用しようとする傾向がある**ため、完全に無関係なコンテキストまでも深読みしてしまうかもしれません。私たちはこれを「**チェーホフの銃の誤謬**」と呼んでいます。劇作家のアントン・チェーホフは不要な要素を排除することを提唱しており、「第一幕で壁に銃を掛けるのであれば、次の幕でそれを撃たなければならない。もしそうでないのなら、最初からそこに掛けるべきではない」と述べています。
+
+<div class="ref">
+ref:LLMのプロンプトエンジニアリング
 </div>
 
 ---
+
 
 # 3. 失敗パターン
 
