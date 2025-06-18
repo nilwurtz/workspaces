@@ -7,6 +7,7 @@ style: |
   @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@200;400;700&family=Noto+Serif+JP:wght@200;400;700&display=swap");
   * {
     font-family: "Noto Sans JP", sans-serif;
+    color: #333333;
   }
 
   section {
@@ -34,14 +35,14 @@ style: |
     font-size: 24px;
   }
   .problem {
-    background-color: #FFE1E0;
+    background-color: #F8E8E9;
     padding: 12px;
     border-left: 4px solid #F49BAB;
     margin: 12px 0;
     font-size: 22px;
   }
   .solution {
-    background-color: #FFE1E0;
+    background-color: #E8E1F5;
     padding: 12px;
     border-left: 4px solid #9B7EBD;
     margin: 12px 0;
@@ -54,10 +55,11 @@ style: |
     font-size: 20px;
   }
   .engineer-focus {
-    background-color: #FFE1E0;
-    padding: 15px;
+    background-color: #EFEAF7;
+    padding: 12px;
     border-left: 4px solid #7F55B1;
-    margin: 15px 0;
+    margin: 12px 0;
+    font-size: 22px;
   }
   .ref {
     font-size: .6em;
@@ -122,7 +124,11 @@ style: |
 - **本質**: 次の単語を予測するタスクを繰り返す **テキスト補完エンジン**
 - **学習**: 大量のテキストデータから言語のパターンや構造を学習
 
+<div class="center-image">
+
 ![w:600 h:300 cover](/images/04-gpt3-generate-tokens-output.gif)
+
+</div>
 
 <span class="ref">ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
 </span>
@@ -156,7 +162,7 @@ style: |
 
 ---
 
-## Q: LLMはなぜ「Chat」できるのか？
+## Q: 補完エンジンにすぎないLLMはなぜ「Chat」できるのか？
 
 ---
 
@@ -204,8 +210,6 @@ LLMの基礎は「テキスト補完エンジン」だが、
 
 ### 一方向性：未来を見ることができない
 
-#### 自己回帰モデルの制約
-
 **LLMは「左から右へ」の一方向処理のみ可能**
 
 - **後方参照のみ**: 過去のトークンしか参照できない
@@ -213,9 +217,6 @@ LLMの基礎は「テキスト補完エンジン」だが、
 - **層間制約**: 上位層の情報を下位層に戻せない
 
 <div class="engineer-focus">
-💻 **アーキテクチャ的制約**<br>
-・Transformer の Decoder-only 構造<br>
-・Masked Self-Attention により未来のトークンをマスク<br>
 ・各レイヤーは前段の出力のみを入力として受け取る
 </div>
 
@@ -223,31 +224,32 @@ LLMの基礎は「テキスト補完エンジン」だが、
 
 ---
 
-TODO: LLMの図を入れる。
+## どういうことか？
 
 
+![](images/pefl_0215.png)
+
+<div class="ref">
+ref: LLMのプロンプトエンジニアリング
+</div>
 
 ---
 
 ## 制約の具体的な影響
 
 <div class="problem">
-❌ **文字数カウント**: "strawberryに含まれるRの数は？"<br>
+❌ <strong>文字数カウント</strong>: "strawberryに含まれるRの数は？"<br>
 → すでに処理済みの文字列を「遡って」解析できない
 </div>
 
 <div class="problem">
-❌ **文字列逆転**: "hello を逆順にして"<br>
+❌ <strong>文字列逆転</strong>: "hello を逆順にして"<br>
 → トークン化＋一方向性により困難
 </div>
 
 <div class="solution">
-✅ **前向き処理**: "これから書く文章の文字数を数えながら書いて"<br>
+✅ <strong>前向き処理</strong>: "これから書く文章の文字数を数えながら書いて"<br>
 → 生成しながら同時にカウント可能（ただし精度は低い）
-</div>
-
-<div class="engineer-focus">
-💻 <strong>エンジニアへの示唆</strong>: 正規表現的な厳密な文字列処理、後方参照が必要な処理はLLMの苦手分野
 </div>
 
 ---
@@ -267,37 +269,42 @@ TODO: LLMの図を入れる。
 #### 一方向処理との組み合わせ効果
 
 <div class="problem">
-❌ **誤字検出の困難さ**<br>
+❌ <strong>誤字検出の困難さ</strong><br>
 "gohst"を見たとき、一方向処理により"ghost"との関連性を認識しにくい<br>
 文脈から推測するしかない
 </div>
 
 <div class="engineer-focus">
-💻 **実用的影響**: 変数名の typo、API名の微細な違い、ファイルパスの大小文字違いなどを正確に扱えない
+💻 <strong>実用的影響</strong>: 変数名の typo、API名の微細な違い、ファイルパスの大小文字違いなどを正確に扱えない
 </div>
 
 ---
 
+<div class="center-image">
 
-![](/images/08-gpt3-tokens-transformer-blocks.gif)
+![w:800](/images/08-gpt3-tokens-transformer-blocks.gif)
+
+</div>
+
+<div class="ref">
 
 ref: https://jalammar.github.io/how-gpt3-works-visualizations-animations/
-
+</div>
 
 ---
 
 ### トークン化の実用的な問題
 
 <div class="problem">
-❌ **厳密な文字列処理**<br>
+❌ <strong>厳密な文字列処理</strong><br>
 ・正規表現パターンの生成・検証<br>
 ・ASCIIアート、図表の生成<br>
-・コードフォーマットの行数指定<br>
+・コードの行数指定<br>
 ・変数名のスペルチェック
 </div>
 
 <div class="solution">
-✅ **トークンレベルで処理しやすいタスク**<br>
+✅ <strong>トークンレベルで処理しやすいタスク</strong><br>
 ・自然言語の生成・要約<br>
 ・意味的類似性の判断<br>
 ・構造化されたコード生成<br>
