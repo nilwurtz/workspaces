@@ -12,37 +12,38 @@ style: |
   section {
     font-size: 26px;
     line-height: 1.4;
+    background-color: #f6f6f6;
   }
   h1 {
-    color: #2563eb;
+    color: #7F55B1;
     font-size: 44px;
   }
   h2 {
-    color: #dc2626;
+    color: #9B7EBD;
     font-size: 32px;
   }
   h3 {
-    color: #059669;
+    color: #F49BAB;
     font-size: 28px;
   }
   .highlight {
-    background-color: #fef3c7;
+    background-color: #FFE1E0;
     padding: 15px;
     border-radius: 8px;
     margin: 15px 0;
     font-size: 24px;
   }
   .problem {
-    background-color: #fef2f2;
+    background-color: #FFE1E0;
     padding: 12px;
-    border-left: 4px solid #dc2626;
+    border-left: 4px solid #F49BAB;
     margin: 12px 0;
     font-size: 22px;
   }
   .solution {
-    background-color: #f0fdf4;
+    background-color: #FFE1E0;
     padding: 12px;
-    border-left: 4px solid #16a34a;
+    border-left: 4px solid #9B7EBD;
     margin: 12px 0;
     font-size: 22px;
   }
@@ -53,9 +54,9 @@ style: |
     font-size: 20px;
   }
   .engineer-focus {
-    background-color: #eff6ff;
+    background-color: #FFE1E0;
     padding: 15px;
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid #7F55B1;
     margin: 15px 0;
   }
   .ref {
@@ -64,6 +65,13 @@ style: |
     display: block;
     text-align: center;
     margin-top: .3em;
+  }
+  .center-image {
+    text-align: center;
+  }
+  .center-image img {
+    display: block;
+    margin: 0 auto;
   }
 ---
 
@@ -75,6 +83,19 @@ style: |
 📊 目標：LLMを理解して「これはうまくいきそう感」を得る<br>
 🔍 目標：失敗の原因をプロファイルしやすくする
 </div>
+
+---
+
+## tl;dr
+
+**読もう**
+
+<div class="center-image">
+
+![w:400](images/40113_prompt_engineering_for_llms_cvr.jpg)
+
+</div>
+
 
 ---
 
