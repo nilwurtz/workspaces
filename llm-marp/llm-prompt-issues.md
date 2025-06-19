@@ -654,6 +654,20 @@ ref: LLMのプロンプトエンジニアリング
 </div>
 
 ---
+<div class="center-block">
+
+### 自分のイメージ
+
+迷いそう・落ちそうなところを厚くサポート
+</div>
+
+<div class="center-image">
+
+![w:600](images/mario-image.png)
+</div>
+
+
+---
 
 ## うまく使うために
 
