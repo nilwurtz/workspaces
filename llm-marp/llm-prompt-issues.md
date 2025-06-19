@@ -5,6 +5,7 @@ paginate: true
 size: 16:9
 style: |
   @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@200;400;700&family=Noto+Serif+JP:wght@200;400;700&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
   * {
     font-family: "Noto Sans JP", sans-serif;
     color: #333333;
@@ -61,6 +62,10 @@ style: |
   }
   pre {
     font-size: 20px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  code * {
+    font-family: "JetBrains Mono", monospace;
   }
   .engineer-focus {
     background-color: #E8F5F3;
