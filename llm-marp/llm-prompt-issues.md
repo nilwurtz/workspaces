@@ -67,6 +67,9 @@ style: |
   code * {
     font-family: "JetBrains Mono", monospace;
   }
+  small {
+    font-size: 20px;
+  }
   .engineer-focus {
     background-color: #E8F5F3;
     padding: 12px;
