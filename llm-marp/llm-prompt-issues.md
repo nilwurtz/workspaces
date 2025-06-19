@@ -244,7 +244,7 @@ assistant: "<call git commit> <call git push>"
 - **層間制約**: 上位層の情報を下位層に戻せない
 
 <div class="engineer-focus">
-・f(1) |> f(2) |> f(3) |> ... |> f(n)<br>
+
 ・各レイヤーは前段の出力のみを入力として受け取るだけ
 </div>
 
@@ -519,6 +519,48 @@ LLMはそのプロンプトに基づいて応答を生成
 
 ---
 
+## LLM アプリケーション実装の一般的な流れ
+
+複雑な問題をワークフローの要素に分割。
+タスク処理やワークフローは決定論的なものも含まれる
+
+<div class="engineer-focus">
+<strong>NewsPicks Agentの場合</strong><br>
+ゴール：ユーザー行動から示唆を得る(仮)<br>
+タスク：ユーザー情報の特定/ユーザー閲覧情報の収集/ニュース記事の要約/読んだニュースの要約<br>
+</div>
+
+<div class="center-image">
+
+![w:900](images/pefl_0904.png)
+</div>
+
+<div class="ref">
+ref: LLMのプロンプトエンジニアリング
+</div>
+
+---
+
+## LLM アプリケーション実装の一般的な流れ
+
+高度なものでは、ワークフローもLLMがドライブする。
+ゴールが多岐にわたるため、これらのタスクの分割と順序付け自体をLLMが行うことが求められる。
+
+→ **我々が仲良くなりたいのはだいたいこっち**
+
+<div class="engineer-focus">
+<strong>コーディングエージェントの場合</strong><br>
+ゴール1：ユーザー指示に従って実装を行う<br>
+タスク：ユーザー指示の理解/既存実装の発見/関連実装の発見/実装の生成/検証<br>
+<br>
+ゴール2：ユーザー指示に従ってデバッグを行う<br>
+タスク：ユーザー指示の理解/エラー文の理解/エラー箇所の特定/公式ドキュメントの参照/ソースコードの理解<br>
+</div>
+
+
+---
+
+
 ## LLMアプリケーションの実態
 
 <div class="highlight">
@@ -526,29 +568,50 @@ LLMは、テキストを受け取ってテキストを生成するだけの「�
 そのため、どの情報も必ず一つのテキストとして渡され、返答もまたテキストとして返される
 </div>
 
-<small>LLMアプリケーション層において、どのような情報を収集し、どのようにプロンプトを生成するかが、モデル性能と同等かそれ以上に重要になる</small>
+LLMアプリケーションにおいて、どのような情報を収集し、どのようにプロンプトを生成する（してもらう）かが、<strong>モデル性能と同等かそれ以上に重要</strong>になる
+
+
 
 ---
 
-## Copilot Agentの内部処理（推測）
 
-```python
-def copilot_agent(user_request, workspace):
-    context = {
-        "current_file": get_active_file(),
-        "related_files": find_related_files(),
-        "git_history": get_recent_commits(),
-        "project_structure": analyze_workspace(),
-        "dependencies": parse_package_files(),
-        "user_intent": classify_request(user_request)
-    }
+Q.LLMアプリケーションはどのようなときにプロンプトを構成するだろうか？
 
-    prompt = build_structured_prompt(context, user_request)
-    response = llm.generate(prompt)
-    return response
-```
+
+A.大体これ全部
+
+- ゴールを理解
+- タスクを理解
+- タスクを実行
+- タスクを順序立てる
+
+
+<div class="center-image">
+
+![w:800](images/pefl_0904.png)
+</div>
+
+<div class="ref">
+ref: LLMのプロンプトエンジニアリング
+</div>
 
 ---
+
+
+### これがわかるような指示になっているだろうか？
+
+- **ゴールを理解してもらう**
+  - 新規実装？削除？変更？
+- **タスクを理解してもらう**
+  - どのようなタスクを実行する必要があるか？
+  - どのような情報が必要か？
+- **タスクを実行してもらう**
+  - 公式ドキュメントを参照するならURLを付与しているか？
+- **タスクを順序立ててもらう**
+  - どれを先にやったらスムーズか？
+
+---
+
 
 ## LLMアプリケーション利用の成功要因（1/2）
 
