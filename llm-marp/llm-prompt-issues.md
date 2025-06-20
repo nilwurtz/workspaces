@@ -110,7 +110,7 @@ style: |
 
 <div class="center-image">
 
-![w:400](images/40113_prompt_engineering_for_llms_cvr.jpg)
+![w:400](./images/40113_prompt_engineering_for_llms_cvr.jpg)
 
 </div>
 
@@ -142,7 +142,7 @@ style: |
 
 <div class="center-image">
 
-![w:600 h:300 cover](/images/04-gpt3-generate-tokens-output.gif)
+![w:600 h:300 cover](./images/04-gpt3-generate-tokens-output.gif)
 
 </div>
 
@@ -256,7 +256,7 @@ assistant: "<call git commit> <call git push>"
 ### どういうことか？
 
 
-![](images/pefl_0215.png)
+![](./images/pefl_0215.png)
 
 <div class="ref">
 ref: LLMのプロンプトエンジニアリング
@@ -362,7 +362,7 @@ ref: LLMのプロンプトエンジニアリング
 
 <div class="center-image">
 
-![w:800](images/pefl_0601.png)
+![w:800](./images/pefl_0601.png)
 </div>
 
 <div class="ref">
@@ -457,7 +457,7 @@ ref:LLMのプロンプトエンジニアリング
 モデルに渡す言葉とその応答に対するメンタルモデルは、人間のものと異なることを認識する
 
 
-![](images/pefl_0203.png)
+![](./images/pefl_0203.png)
 
 <div class="ref">
 ref: LLMのプロンプトエンジニアリング
@@ -485,15 +485,14 @@ Claude Code
 Github Copilot Agent
 Junie
 Devin
+Cursor
 etc...
 
-なんかすごい
+なんかすごい！やばい！
 
 </div>
 
 ---
-<!-- TODO:LLMは結局文字列しか受け取らず文字列しか生成しないということを強調する。そのため、Context収集やプロンプト生成を行うアプリケーション層の性能と、その特性を知ることもかなり重要。という旨を強調する。 -->
-
 ## 「魔法」の正体
 
 <div class="highlight">
@@ -534,7 +533,7 @@ LLMはそのプロンプトに基づいて応答を生成
 
 <div class="center-image">
 
-![w:900](images/pefl_0904.png)
+![w:900](./images/pefl_0904.png)
 </div>
 
 <div class="ref">
@@ -597,7 +596,7 @@ A.大体これ全部
 
 <div class="center-image">
 
-![w:800](images/pefl_0904.png)
+![w:800](./images/pefl_0904.png)
 </div>
 
 <div class="ref">
@@ -664,7 +663,7 @@ ref: LLMのプロンプトエンジニアリング
 
 <div class="center-image">
 
-![w:600](images/mario-image.png)
+![w:600](./images/mario-image.png)
 </div>
 
 

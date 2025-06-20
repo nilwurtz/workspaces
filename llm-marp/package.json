@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npx @marp-team/marp-cli@latest llm-prompt-issues.md"
+    "build": "npx @marp-team/marp-cli@latest llm-prompt-issues.md",
+    "pdf": "npx @marp-team/marp-cli@latest --pdf --allow-local-files llm-prompt-issues.md",
+    "pptx": "npx @marp-team/marp-cli@latest --pptx llm-prompt-issues.md"
   },
   "author": "",
   "license": "ISC",
